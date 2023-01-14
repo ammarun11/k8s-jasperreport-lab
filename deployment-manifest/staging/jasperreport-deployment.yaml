@@ -19,7 +19,7 @@ data:
   JASPERREPORTS_DATABASE_PORT_NUMBER: 3306
   JASPERREPORTS_DATABASE_USER: bn_jasperreports
   JASPERREPORTS_DATABASE_NAME: bitnami_jasperreports
-  JASPERREPORTS_PASSWORD: ammarjasper
+  JASPERREPORTS_PASSWORD: ${{ secrets.JASPERREPORTS_PASSWORD }} 
 ---  
 apiVersion: apps/v1
 kind: Deployment
@@ -47,6 +47,13 @@ spec:
           envFrom:
             - configMapRef:
                 name: jasperreport-config
+          volumeMounts:
+            - mountPath: /bitnami
+              name: jasperreport
+      volumes:
+        - name: jasperreport
+          persistentVolumeClaim:
+            claimName: jasperreport-data-stg-claim
 ---
 apiVersion: v1
 kind: Service
@@ -60,4 +67,4 @@ spec:
   ports:
     - protocol: TCP
       port: 8080
-      targetPort: 8080
+      targetPort: 8181
