@@ -9,7 +9,7 @@ jobs:
   image-scanning:
     name: Scan Image Vulnerability
     runs-on: ubuntu-latest
-    needs: build-image
+    #needs: build-image
     steps:
       - name: get version
         id: get-version
@@ -26,7 +26,8 @@ jobs:
 
   deploy-staging:
     name: Deploy Staging
-    needs: [build-image, image-scanning]
+    #needs: [build-image, image-scanning]
+    needs: image-scanning
     runs-on: self-hosted
     environment:
       name: Staging
