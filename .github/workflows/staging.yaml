@@ -6,42 +6,6 @@ on:
       - 'v*'
 
 jobs:
-  # build-image:
-  #   name: Build Docker image and push to repositories
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-
-  #     - name: Get Version
-  #       id: get-version
-  #       run: |
-  #         echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-
-      # - name: Update Staging Manifest Yaml
-      #   run: |
-      #     cd deployment-manifest/staging
-      #     yq e -i '.spec.template.spec.containers[0].image="palopalepalo/odoo:16${{ steps.get-version.outputs.VERSION }}-rc"' odoo-deployment.yaml
-      #     cat odoo-deployment.yaml
-      
-      # - name: Update Production Manifest Yaml
-      #   run: |
-      #     cd deployment-manifest/production
-      #     yq e -i '.spec.template.spec.containers[0].image="palopalepalo/odoo:16${{ steps.get-version.outputs.VERSION }}"' odoo-deployment.yaml
-      #     cat odoo-deployment.yaml
-
-      # - name: Push Change Back to Github Staging Branch
-      #   uses: dmnemec/copy_file_to_another_repo_action@main
-      #   env:
-      #     API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-      #   with:
-      #     source_file: deployment
-      #     destination_repo: ammarun11/odoo-githubActions-lab
-      #     destination_branch: dev
-      #     user_email: cintadamai46@gmail.com
-      #     user_name: ammarun11
-      #     commit_message: Update k8s manifest image version to ${{ steps.get-version.outputs.VERSION }}
-  
   image-scanning:
     name: Scan Image Vulnerability
     runs-on: ubuntu-latest
