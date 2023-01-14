@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-config
+  namespace: jasperreport-server-stg
+  labels:
+    app: mariadb
+data:
+  # ALLOW_EMPTY_PASSWORD is recommended only for development.
+  # ALLOW_EMPTY_PASSWORD=yes
+  MARIADB_USER: bn_jasperreports
+  MARIADB_DATABASE: bitnami_jasperreports
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb  # Sets Deployment name
+  namespace: jasperreport-server-stg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mariadb
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: docker.io/bitnami/mariadb:10.6 # Sets Image
+          ports:
+            - containerPort: 5432  # Exposes container port
+          envFrom:
+            - configMapRef:
+                name: mariadb-config
+          volumeMounts:
+            - mountPath: /bitnami/mariadb
+              name: mariadb
+      volumes:
+        - name: mariadb
+          persistentVolumeClaim:
+            claimName: mariadb-data-db-stg-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb # Sets service name
+  namespace: jasperreport-server-stg
+  labels:
+    app: mariadb # Labels and Selectors
+spec:
+  type: NodePort # Sets service type
+  ports:
+    - port: 3306 # Sets port to run the mariadb application
+  selector:
+    app: mariadb

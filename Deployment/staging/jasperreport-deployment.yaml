@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jasperreport-server-stg
+  labels:
+    name: jasperreport-server-stg
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jasperreport-config
+  namespace: jasperreport-server-stg
+  labels:
+    app: jasperreport-server
+data:
+  #ALLOW_EMPTY_PASSWORD is recommended only for development.
+  #ALLOW_EMPTY_PASSWORD=yes
+  JASPERREPORTS_DATABASE_HOST: mariadb
+  JASPERREPORTS_DATABASE_PORT_NUMBER: 3306
+  JASPERREPORTS_DATABASE_USER: bn_jasperreports
+  JASPERREPORTS_DATABASE_NAME: bitnami_jasperreports
+  JASPERREPORTS_PASSWORD: ammarjasper
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jasperreport-server
+  namespace: jasperreport-server-stg
+  labels:
+    app: jasperreport-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jasperreport-server
+  template:
+    metadata:
+      labels:
+        app: jasperreport-server
+    spec:
+      containers:
+        - name: jasperreport-server
+          image: docker.io/bitnami/jasperreports:8.1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: jasperreport-config
+---
+apiVersion: v1
+kind: Service
+metadata:    
+  name: jasperreport-service
+  namespace: jasperreport-server-stg
+spec:
+  type: LoadBalancer
+  selector:
+    app: jasperreport-server
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
