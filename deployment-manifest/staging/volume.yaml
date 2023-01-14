@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolume # Create a PV
 metadata:
   name: mariadb-data-db-stg # Sets PV's name
-  namespace: odoo-ammar-stg
+  namespace: jasperreport-server-stg
   labels:
     type: local # Sets PV's type to local
 spec:
@@ -18,7 +18,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim # Create PVC
 metadata:
   name: mariadb-data-db-stg-claim # Sets name of PV
-  namespace: odoo-ammar-stg
+  namespace: jasperreport-server-stg
 spec:
   storageClassName: manual
   accessModes:
