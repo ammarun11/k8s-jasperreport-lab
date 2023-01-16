@@ -28,9 +28,9 @@ jobs:
         run: |
           cd helm
           # Update Helm Chart Version
-          yq e -i '.version="${{ steps.get-version.outputs.VERSION }}"' chart.yaml
-          yq e -i '.appVersion="$IMAGE_TAG_JASPER"' chart.yaml
-          cat chart.yaml
+          yq e -i '.version="${{ steps.get-version.outputs.VERSION }}"' Chart.yaml
+          yq e -i '.appVersion="$IMAGE_TAG_JASPER"' Chart.yaml
+          cat Chart.yaml
 
           # Update Staging Values
           yq e -i '.image.tag="$IMAGE_TAG_JASPER"' values.yaml
@@ -106,9 +106,9 @@ jobs:
       - name: ArgoCD Deploy to Staging
         run: |
           argocd login --insecure  ${{ secrets.ARGOCD_SERVER }} --username  ${{ secrets.ARGOCD_USER }} --password  ${{ secrets.ARGOCD_PASS}}
-          argocd app create odoo-staging --project default --repo https://cx-harbor.btech.id/chartrepo/cusex --helm-chart odoo --revision ${{ steps.get-version.outputs.VERSION }} --values values-stg.yaml --dest-namespace odoo-stg --dest-server https://kubernetes.default.svc --upsert
-          argocd --grpc-web app sync odoo-staging --force
-          argocd --grpc-web app wait odoo-staging --timeout 600
+          argocd app create jasperreports-staging --project default --repo https://github.com/ammarun11/k8s-jasperreport-lab.git --helm-chart jasperreports --revision ${{ steps.get-version.outputs.VERSION }} --values values-stg.yaml --dest-namespace jasperreports-stg --dest-server https://kubernetes.default.svc --upsert
+          argocd --grpc-web app sync jasperreports-staging --force
+          argocd --grpc-web app wait jasperreports-staging --timeout 600
 
   # create-pr-prod:
   #   name: Create Pull Request to Production
