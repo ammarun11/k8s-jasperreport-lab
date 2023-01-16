@@ -11,8 +11,8 @@ env:
 
 jobs:
   update-image:
-    name: Build Docker Image & Push Chart to Harbor
-    runs-on: self-hosted
+    name: Update Image & Push Chart to Harbor
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -68,7 +68,7 @@ jobs:
 
   scan-image:
     name: Scan Image Vulnerability
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
 
       - name: Scan Staging jasperreport-server image with Trivy
