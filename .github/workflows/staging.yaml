@@ -10,7 +10,7 @@ env:
   IMAGE_TAB_DB: 10.6
 
 jobs:
-  Update-image:
+  update-image:
     name: Build Docker Image & Push Chart to Harbor
     runs-on: self-hosted
     steps:
@@ -59,6 +59,11 @@ jobs:
           user_name: ammarun11
           commit_message: Update k8s helm image version to ${{ steps.get-version.outputs.VERSION }}
 
+  scan-image:
+    name: Scan Image Vulnerability
+    runs-on: self-hosted
+    needs: build-image
+    steps:
 
       - name: Scan Staging jasperreport-server image with Trivy
         uses: aquasecurity/trivy-action@master
@@ -79,7 +84,7 @@ jobs:
   deploy-staging:
     name: Deploy Staging
     #needs: [Update-image, image-scanning]
-    needs: image-scanning
+    needs: [update-image, scan-image]
     runs-on: self-hosted
     environment:
       name: Staging
