@@ -5,21 +5,65 @@ on:
     tags:
       - 'v*'
 
+env:
+  IMAGE_TAG_JASPER: 8.0.0
+  IMAGE_TAB_DB: 10.6
+
 jobs:
-  image-scanning:
-    name: Scan Image Vulnerability
-    runs-on: ubuntu-latest
-    #needs: build-image
+  Update-image:
+    name: Build Docker Image & Push Chart to Harbor
+    runs-on: self-hosted
     steps:
-      - name: get version
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: staging
+
+      - name: Get Version
         id: get-version
         run: |
           echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+      
+      - name: Update Staging Helm Chart Values
+        run: |
+          cd helm
+          # Update Helm Chart Version
+          yq e -i '.version="${{ steps.get-version.outputs.VERSION }}"' chart.yaml
+          yq e -i '.appVersion="$IMAGE_TAG_JASPER"' chart.yaml
+          cat chart.yaml
+
+          # Update Staging Values
+          yq e -i '.image.tag="$IMAGE_TAG_JASPER"' values.yaml
+          cat values.yaml
+          yq e -i '.image.tag="$IMAGE_TAG_JASPER"' values-stg.yaml
+          cat values-stg.yaml
+
+          # Update Production Values
+          yq e -i '.image.tag="$IMAGE_TAG_JASPER"' values-prd.yaml
+          cat values-prd.yaml
+
+      - name: Update Environment Variable
+        run: |
+          cd helm
+          echo VERSION=${{ steps.get-version.outputs.VERSION }} > version.env
+
+      - name: Push Change Back to Github Staging Branch
+        uses: dmnemec/copy_file_to_another_repo_action@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source_file: helm
+          destination_repo: ammarun11/k8s-jasperreport-lab
+          destination_branch: staging
+          user_email: naufalammarun11@gmail.com
+          user_name: ammarun11
+          commit_message: Update k8s helm image version to ${{ steps.get-version.outputs.VERSION }}
+
 
       - name: Scan Staging jasperreport-server image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/bitnami/jasperreports:8.1.0'
+          image-ref: 'docker.io/bitnami/jasperreports:$IMAGE_TAG_JASPER'
           format: 'table'
           exit-code: '0'
           severity: 'MEDIUM,HIGH,CRITICAL'
@@ -27,14 +71,14 @@ jobs:
       - name: Scan Staging mariadb image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/bitnami/mariadb:10.6'
+          image-ref: 'docker.io/bitnami/mariadb:$IMAGE_TAB_DB'
           format: 'table'
           exit-code: '0'
           severity: 'MEDIUM,HIGH,CRITICAL'
 
   deploy-staging:
     name: Deploy Staging
-    #needs: [build-image, image-scanning]
+    #needs: [Update-image, image-scanning]
     needs: image-scanning
     runs-on: self-hosted
     environment:
