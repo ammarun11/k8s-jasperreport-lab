@@ -1,0 +1,55 @@
+name: Production Deployment
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - production
+jobs:
+  if-merged:
+    name: Merge Success
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo The Staging PR was merged into Production
+
+  deploy-production:
+    name: Deploy Production
+    needs: if-merged
+    runs-on: self-hosted
+    environment:
+      name: Production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: production
+          fetch-depth: 0
+
+      - name: Get Version
+        uses: tw3lveparsecs/github-actions-setvars@latest
+        with:
+          envFilePath: ./helm/version.env
+
+      - name: ArgoCD Deploy to Production
+        run: |
+          argocd login --insecure  ${{ secrets.ARGOCD_SERVER }} --username  ${{ secrets.ARGOCD_USER }} --password  ${{ secrets.ARGOCD_PASS}}
+          argocd app create odoo-prod --project default --repo https://cx-harbor.btech.id/chartrepo/cusex --helm-chart odoo --revision ${{ env.VERSION }} --values values-prod.yaml --dest-namespace odoo-prod --dest-server https://kubernetes.default.svc --upsert
+          argocd --grpc-web app sync odoo-prod --force
+          argocd --grpc-web app wait odoo-prod --timeout 600
+
+          argocd login --insecure  ${{ secrets.ARGOCD_SERVER }} --username  ${{ secrets.ARGOCD_USER }} --password  ${{ secrets.ARGOCD_PASS}}
+          argocd app create jasperreport-server-stg --project default --repo https://github.com/ammarun11/k8s-jasperreport-lab.git --revision staging --path ./deployment-manifest/staging --dest-namespace jasperreport-server-stg --dest-server https://kubernetes.default.svc --upsert
+          argocd --grpc-web app sync jasperreport-server-stg --force
+          argocd --grpc-web app wait jasperreport-server-stg --timeout 600
+          
+      - name: Telegram Notification
+        if: cancelled() == false
+        uses: xinthink/action-telegram@v1.1
+        with:
+          botToken: ${{ secrets.TELE_BOT_TOKEN }}
+          chatId: ${{ secrets.TELE_CHAT_ID }}
+          jobStatus: ${{ job.status }}
+          skipSuccess: false
