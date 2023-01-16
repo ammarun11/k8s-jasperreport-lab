@@ -69,7 +69,6 @@ jobs:
   scan-image:
     name: Scan Image Vulnerability
     runs-on: self-hosted
-    needs: build-image
     steps:
 
       - name: Scan Staging jasperreport-server image with Trivy
