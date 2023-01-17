@@ -1,3 +1,4 @@
+namespace: jasperreport-server-stg 
 global:
   imageRegistry: ""
   ## E.g.
