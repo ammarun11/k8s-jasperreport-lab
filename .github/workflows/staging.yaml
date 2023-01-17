@@ -54,7 +54,7 @@ jobs:
       - name: Push Chart to Harbor
         run: |
           helm repo update
-          cd helm/
+          cd helm
           helm cm-push --username ${{ secrets.HARBOR_USERNAME }} --password ${{ secrets.HARBOR_PASSWORD }} jasperreports/ ammar-jasper
 
       - name: Push Change Back to Github Staging Branch
