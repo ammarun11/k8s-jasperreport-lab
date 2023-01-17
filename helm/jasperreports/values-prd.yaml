@@ -6,7 +6,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-
 ## @section Common parameters
 ##
 
@@ -31,7 +30,6 @@ clusterDomain: cluster.local
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
-
 ## @section JasperReports parameters
 ##
 
@@ -47,7 +45,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/jasperreports
-  tag: 8.1.0-debian-11-r39
+  tag: 8.0.0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -120,7 +118,6 @@ updateStrategy:
   ## Can be set to RollingUpdate or OnDelete
   ##
   type: RollingUpdate
-
 ## @section Jasperreports deployment parameters
 ##
 
@@ -351,7 +348,6 @@ persistence:
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}
-
 ## @section Exposure parameters
 ##
 
@@ -407,7 +403,6 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-
 ## Configure the ingress resource that allows you to access the
 ## JasperReports installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -507,7 +502,6 @@ ingress:
   ##             name: http
   ##
   extraRules: []
-
 ## @section Database parameters
 ##
 
@@ -594,7 +588,6 @@ externalDatabase:
   ## @param externalDatabase.type Type of the existing database, allowed values: mariadb, mysql, postgresql
   ##
   type: mariadb
-
 ## @section NetworkPolicy parameters
 
 ## Add networkpolicies
