@@ -105,12 +105,6 @@ jobs:
           argocd --grpc-web app sync jasperreports-stg --force
           argocd --grpc-web app wait jasperreports-stg --timeout 300
 
-
-          # argocd login --insecure  ${{ secrets.ARGOCD_SERVER }} --username  ${{ secrets.ARGOCD_USER }} --password  ${{ secrets.ARGOCD_PASS}}
-          # argocd app create odoo-staging --project default --repo https://cx-harbor.btech.id/chartrepo/cusex --helm-chart odoo --revision ${{ steps.get-version.outputs.VERSION }} --values values-stg.yaml --dest-namespace odoo-stg --dest-server https://kubernetes.default.svc --upsert
-          # argocd --grpc-web app sync odoo-staging --force
-          # argocd --grpc-web app wait odoo-staging --timeout 600
-
   # create-pr-prod:
   #   name: Create Pull Request to Production
   #   needs:  deploy-staging
