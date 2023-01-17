@@ -52,7 +52,7 @@ jobs:
         run: |
           helm repo add ammar-jasper https://cx-harbor.btech.id/chartrepo/ammar-jasper  
           cd helm/
-          helm push --username ${{ secrets.HARBOR_USERNAME }} --password ${{ secrets.HARBOR_PASSWORD }} ammar-jasper
+          helm push ammar-jasper https://cx-harbor.btech.id/chartrepo/ammar-jasper
 
       - name: Push Change Back to Github Staging Branch
         uses: dmnemec/copy_file_to_another_repo_action@main
