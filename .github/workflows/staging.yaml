@@ -101,7 +101,7 @@ jobs:
       - name: ArgoCD Deploy to Staging
         run: |
           argocd login --insecure  ${{ secrets.ARGOCD_SERVER }} --username  ${{ secrets.ARGOCD_USER }} --password  ${{ secrets.ARGOCD_PASS}}
-          argocd app create jasperreport-server-stg --project default --repo https://cx-harbor.btech.id/chartrepo/ammar-jasper --helm-chart jasperreports --revision ${{ steps.get-version.outputs.VERSION }} --values values-stg.yaml --dest-namespace jasperreport-server-stg --dest-server https://kubernetes.default.svc --upsert
+          argocd app create jasperreport-stg --repo https://cx-harbor.btech.id/chartrepo/ammar-jasper --helm-chart jasperreports --revision ${{ steps.get-version.outputs.VERSION }} --values values-stg.yaml --dest-namespace jasperreport-server-stg --dest-server https://kubernetes.default.svc --upsert
           argocd --grpc-web app sync jasperreport-server-stg --force
           argocd --grpc-web app wait jasperreport-server-stg --timeout 300
 
