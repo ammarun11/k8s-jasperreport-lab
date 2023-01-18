@@ -10,7 +10,6 @@ global:
 ##
 
 namespace: jasperreports-server-stg
-
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""
