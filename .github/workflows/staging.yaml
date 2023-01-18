@@ -11,6 +11,8 @@ on:
 env:
   IMAGE_TAG_JASPER: 8.0.0
   IMAGE_TAB_DB: 10.6
+  STORAGE_CLASS: ""
+  jasperreportsPassword: ""
 
 jobs:
   update-image:
