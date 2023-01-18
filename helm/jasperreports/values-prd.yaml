@@ -9,7 +9,7 @@ global:
 ## @section Common parameters
 ##
 
-namespace: jasperreports-server-prd
+namespace: "jasperreports-server-prd"
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
 kubeVersion: ""

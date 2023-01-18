@@ -124,31 +124,31 @@ jobs:
           # argocd app create jasperreport-server-stg --project default --repo https://github.com/ammarun11/k8s-jasperreport-lab.git --revision ${{ steps.get-version.outputs.VERSION }} --path ./helm/jasperreports --dest-namespace jasperreport-server-stg --dest-server https://kubernetes.default.svc --upsert
           # argocd --grpc-web app sync jasperreport-server-stg --force
           # argocd --grpc-web app wait jasperreport-server-stg --timeout 300
-  # create-pr-prod:
-  #   name: Create Pull Request to Production
-  #   needs:  deploy-staging
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout staging branch
-  #       uses: actions/checkout@v3
-  #       with:
-  #         ref: staging
+  create-pr-prod:
+    name: Create Pull Request to Production
+    needs:  deploy-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout staging branch
+        uses: actions/checkout@v3
+        with:
+          ref: staging
 
-  #     - name: Create pull request to production
-  #       id: cpr
-  #       uses: peter-evans/create-pull-request@v4
-  #       with:
-  #         token: ${{ secrets.API_TOKEN_GITHUB_FEBRY }}
-  #         commit-message: Request Merge for Production branch
-  #         title: Request Merge for Production branch
-  #         body: Request Merge for Production branch
-  #         base: staging
-  #         labels: automated-pr, merge-to-prod
-  #         branch: production
+      - name: Create pull request to production
+        id: cpr
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.API_TOKEN_GITHUB }}
+          commit-message: Request Merge for Production branch
+          title: Request Merge for Production branch
+          body: Request Merge for Production branch
+          base: staging
+          labels: automated-pr, merge-to-prod
+          branch: production
 
-  #     - name: Check outputs
-  #       if: ${{ steps.cpr.outputs.pull-request-number }}
-  #       run: |
-  #         echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-  #         echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
-  #         echo "Pull Request Operation - ${{ steps.cpr.outputs.pull-request-operation }}"
+      - name: Check outputs
+        if: ${{ steps.cpr.outputs.pull-request-number }}
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+          echo "Pull Request Operation - ${{ steps.cpr.outputs.pull-request-operation }}"
