@@ -1,3 +1,4 @@
+MAINTAINER ammarun
 FROM bitnami/jasperreports:8
 
 WORKDIR /opt/bitnami/jasperreports/
