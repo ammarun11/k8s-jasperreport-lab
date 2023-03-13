@@ -16,7 +16,7 @@ on:
 
 jobs:
   update-image:
-    name: Update Image & Push Chart to Harbor
+    name: build Image & Push Image to Dockerhub
     runs-on: self-hosted
     steps:
       - name: Checkout code
@@ -92,7 +92,7 @@ jobs:
           source_file: helm
           destination_repo: ammarun11/k8s-jasperreport-lab
           destination_branch: staging
-          user_email: naufalammarun11@gmail.com
+          user_email: cintadamai46@gmail.com
           user_name: ammarun11
           commit_message: Update k8s helm image version to ${{ steps.get-version.outputs.VERSION }}
 
@@ -108,11 +108,6 @@ jobs:
         id: get-version
         run: |
           echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
-        #  export EXIST_STG=$(kubectl get ns |grep  jasperreports-server-stg | awk '{print $1}' | wc -l)
-        #  echo $EXIST_STG
-        #  echo "Deploying Staging Application..."
-        #  if [ "$EXIST_STG" == "0" ]; then helm install $APP_NAME_STG cusex/jasperreports-gl --version $TAG --values helm/jasperreports-gl/values-stg.yaml --wait --namespace $APP_NAME_STG; else helm upgrade $APP_NAME_STG cusex/jasperreports-gl --version $TAG --values helm/jasperreports-gl/values-stg.yaml --wait --namespace $APP_NAME_STG; fi
-        #  helm list -n $APP_NAME_STG
 
       - name: ArgoCD Deploy to Staging
         run: |
