@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  update-image:
+  build-image:
     name: build Image & Push Image to Dockerhub
     runs-on: self-hosted
     steps:
@@ -89,8 +89,8 @@ jobs:
 
   deploy-staging:
     name: Deploy Staging
-    #needs: [Update-image, image-scanning]
-    needs: [update-image]
+    #needs: [build-image, image-scanning]
+    needs: [build-image]
     runs-on: self-hosted
     environment:
       name: Staging

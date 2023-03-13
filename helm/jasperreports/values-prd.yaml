@@ -45,7 +45,7 @@ extraDeploy: []
 ##
 image:
   registry: docker.io
-  repository: bitnami/jasperreports
+  repository: palopalepalo/jasperreports
   tag: 8-v1.0.3
   digest: ""
   ## Specify a imagePullPolicy
@@ -62,24 +62,24 @@ image:
   ##
   pullSecrets: []
 ## @param jasperreportsUsername JasperReports user
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
+## ref: https://github.com/bitnami/containers/tree/main/palopalepalo/jasperreports#configuration
 ##
 jasperreportsUsername: jasperadmin
 ## @param jasperreportsPassword JasperReports password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
+## ref: https://github.com/bitnami/containers/tree/main/palopalepalo/jasperreports#configuration
 ##
 jasperreportsPassword: ""
 ## @param jasperreportsEmail JasperReports user email
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
+## ref: https://github.com/bitnami/containers/tree/main/palopalepalo/jasperreports#configuration
 ##
 jasperreportsEmail: user@example.com
 ## @param allowEmptyPassword Set to `yes` to allow the container to be started with blank passwords
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/palopalepalo/jasperreports#environment-variables
 ##
 allowEmptyPassword: "no"
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/palopalepalo/jasperreports#smtp-configuration
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpEmail SMTP email
