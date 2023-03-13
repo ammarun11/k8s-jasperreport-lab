@@ -1,4 +1,4 @@
-FROM palopalepalo/jasperreports:8
+FROM bitnami/jasperreports:8
 MAINTAINER ammarun
 
 WORKDIR /opt/palopalepalo/jasperreports/
