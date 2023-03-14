@@ -112,7 +112,7 @@ jobs:
       - name: ArgoCD Deploy to Staging
         run: |
           argocd login --insecure  ${{ secrets.ARGOCD_SERVER }} --username  ${{ secrets.ARGOCD_USER }} --password  ${{ secrets.ARGOCD_PASS}}
-          argocd create app jasperreports-stg \
+          argocd app create jasperreports-stg \
             --repo https://github.com/ammarun11/k8s-jasperreport-lab.git \
             --path helm/jasperreports \
             --helm-chart jasperreports \
