@@ -1,3 +1,5 @@
 this is ammar test upload file into container!
 
 update again and again again again
+
+          argocd app create jasperreports-stg --project default --repo oci://registry-1.docker.io/palopalepalo/jasperreports --path helm/jasperreports --helm-chart jasperreports --revision ${{ steps.get-version.outputs.VERSION }} --values values-stg.yaml --dest-namespace jasperreports-server-stg --dest-server https://kubernetes.default.svc --upsert
